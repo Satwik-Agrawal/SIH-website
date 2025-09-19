@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Sign Up - Societal Issue Reporting</title>
+  <link rel="stylesheet" href="admin.css">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f4f6f9;
+    }
+    .signup-container {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 380px;
+    }
+    h2 { margin-bottom: 20px; color: #333; }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      border-radius: 8px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      background: #28a745;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover { background: #1e7e34; }
+    .login-link {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+    .login-link a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-container">
+    <h2>Admin Sign Up</h2>
+    <input type="text" id="name" placeholder="Full Name" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <select id="district" required>
+      <option value="">Select District</option>
+      <option value="Ranchi">Ranchi</option>
+      <option value="Dhanbad">Dhanbad</option>
+      <option value="Jamshedpur">Jamshedpur</option>
+      <option value="Hazaribagh">Hazaribagh</option>
+      <option value="Bokaro">Bokaro</option>
+      <!-- Add all Jharkhand districts here -->
+    </select>
+    <button onclick="adminSignup()">Sign Up</button>
+    <div class="login-link">
+      Already have an account? <a href="admin_login.html">Login</a>
+    </div>
+  </div>
+
+  <script>
+    function adminSignup() {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const district = document.getElementById("district").value;
+
+      if (!name || !email || !password || !district) {
+        alert("⚠ Please fill all fields.");
+        return;
+      }
+
+      // Save admin details in localStorage
+      const adminAccount = { name, email, password, district };
+      localStorage.setItem("adminAccount", JSON.stringify(adminAccount));
+
+      alert("✅ Account created successfully! Please login.");
+      window.location.href = "admin_login.html";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Profile - Societal Issue Reporting</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .profile-container {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+    .profile-header {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #007bff;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      font-weight: bold;
+      margin: 0 auto 20px;
+    }
+    .profile-name {
+      font-size: 24px;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    .profile-email {
+      color: #666;
+      font-size: 16px;
+    }
+    .profile-tabs {
+      display: flex;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .tab-button {
+      flex: 1;
+      padding: 15px 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      color: #666;
+      transition: all 0.3s;
+    }
+    .tab-button.active {
+      background: #007bff;
+      color: white;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .issues-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .issue-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .issue-card:hover {
+      transform: translateY(-2px);
+    }
+    .issue-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    .issue-content {
+      padding: 20px;
+    }
+    .issue-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    .issue-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .issue-category {
+      background: #e3f2fd;
+      color: #1976d2;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .issue-status {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+    .status-in-progress {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+    .status-resolved {
+      background: #d4edda;
+      color: #155724;
+    }
+    .issue-description {
+      color: #666;
+      line-height: 1.5;
+      margin-bottom: 15px;
+    }
+    .issue-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      color: #666;
+    }
+    .issue-votes {
+      display: flex;
+      align-items: center;
+    }
+    .issue-votes span {
+      margin-left: 5px;
+    }
+    .no-issues {
+      text-align: center;
+      padding: 60px 20px;
+      color: #666;
+    }
+    .no-issues h3 {
+      margin-bottom: 10px;
+      color: #2c3e50;
+    }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #007bff;
+      text-decoration: none;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+    @media (max-width: 768px) {
+      .issues-grid {
+        grid-template-columns: 1fr;
+      }
+      .profile-tabs {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-container">
+    <a href="index.html" class="back-link">← Back to Home</a>
+    
+    <div class="profile-header">
+      <div class="profile-avatar" id="profileAvatar">U</div>
+      <div class="profile-name" id="profileName">Loading...</div>
+      <div class="profile-email" id="profileEmail">Loading...</div>
+    </div>
+
+    <div class="profile-tabs">
+      <button class="tab-button active" onclick="showTab('my-issues')">My Reported Issues</button>
+      <button class="tab-button" onclick="showTab('voted-issues')">Issues I Voted On</button>
+      <button class="tab-button" onclick="showTab('profile-info')">Profile Information</button>
+    </div>
+
+    <!-- My Issues Tab -->
+    <div id="my-issues" class="tab-content active">
+      <div id="myIssuesContent">
+        <div class="loading">Loading your issues...</div>
+      </div>
+    </div>
+
+    <!-- Voted Issues Tab -->
+    <div id="voted-issues" class="tab-content">
+      <div id="votedIssuesContent">
+        <div class="loading">Loading voted issues...</div>
+      </div>
+      </div>
+
+    <!-- Profile Info Tab -->
+    <div id="profile-info" class="tab-content">
+      <div class="issue-card">
+        <div class="issue-content">
+          <h3>Profile Information</h3>
+          <p>Your profile information is managed through your account settings. To update your details, please contact our support team.</p>
+          <div style="margin-top: 20px;">
+            <p><strong>Username:</strong> <span id="infoUsername">-</span></p>
+            <p><strong>Email:</strong> <span id="infoEmail">-</span></p>
+            <p><strong>Member Since:</strong> <span id="memberSince">-</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="api-client.js"></script>
+  <script>
+    // Check authentication
+    if (!apiClient.isAuthenticated()) {
+      window.location.href = 'login.html';
+    }
+
+    // Initialize profile
+    document.addEventListener('DOMContentLoaded', function() {
+      loadProfileInfo();
+      loadMyIssues();
+    });
+
+    // Load profile information
+    function loadProfileInfo() {
+      const user = apiClient.user;
+      if (user) {
+        document.getElementById('profileName').textContent = user.fullName || user.username;
+        document.getElementById('profileEmail').textContent = user.email;
+        document.getElementById('infoUsername').textContent = user.username;
+        document.getElementById('infoEmail').textContent = user.email;
+        document.getElementById('memberSince').textContent = 'Recently';
+        
+        // Set avatar initial
+        const avatar = document.getElementById('profileAvatar');
+        avatar.textContent = (user.fullName || user.username).charAt(0).toUpperCase();
+      }
+    }
+
+    // Load user's reported issues
+    async function loadMyIssues() {
+      try {
+        const issues = await apiClient.getIssues();
+        const myIssues = issues.filter(issue => issue.reporter_id === apiClient.user.id);
+        displayIssues(myIssues, 'myIssuesContent');
+      } catch (error) {
+        console.error('Error loading my issues:', error);
+        document.getElementById('myIssuesContent').innerHTML = 
+          '<div class="no-issues"><h3>Error loading issues</h3><p>Please try again later.</p></div>';
+      }
+    }
+
+    // Load voted issues (placeholder - would need backend support)
+    async function loadVotedIssues() {
+      // This would require a new API endpoint to get issues the user has voted on
+      document.getElementById('votedIssuesContent').innerHTML = 
+        '<div class="no-issues"><h3>Voted Issues</h3><p>This feature is coming soon!</p></div>';
+    }
+
+    // Display issues in grid
+    function displayIssues(issues, containerId) {
+      const container = document.getElementById(containerId);
+      
+      if (issues.length === 0) {
+        container.innerHTML = `
+          <div class="no-issues">
+            <h3>No Issues Found</h3>
+            <p>You haven't reported any issues yet.</p>
+            <a href="report.html" style="color: #007bff; text-decoration: none;">Report your first issue →</a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = issues.map(issue => `
+        <div class="issue-card">
+          ${issue.image_path ? `<img src="/uploads/${issue.image_path.split('/').pop()}" alt="Issue Image" class="issue-image">` : ''}
+          <div class="issue-content">
+            <div class="issue-title">${escapeHtml(issue.title)}</div>
+            <div class="issue-meta">
+              <span class="issue-category">${issue.category}</span>
+              <span class="issue-status status-${issue.status.toLowerCase().replace(' ', '-')}">${issue.status}</span>
+            </div>
+            <div class="issue-description">${escapeHtml(issue.description)}</div>
+            <div class="issue-stats">
+              <div class="issue-votes">
+                👍 <span>${issue.vote_count || 0} votes</span>
+              </div>
+              <div>${new Date(issue.created_at).toLocaleDateString()}</div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Show tab content
+    function showTab(tabName) {
+      // Hide all tab contents
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Remove active class from all tab buttons
+      document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Show selected tab
+      document.getElementById(tabName).classList.add('active');
+      event.target.classList.add('active');
+      
+      // Load tab-specific data
+      if (tabName === 'voted-issues') {
+        loadVotedIssues();
+      }
+    }
+
+    // Escape HTML to prevent XSS
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>

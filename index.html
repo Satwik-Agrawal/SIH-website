@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Home - Societal Issue Reporting</title>
+  <link rel="stylesheet" href="home.css" />
+
+  <!-- ✅ Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+
+<body class="home-page">
+
+  <!-- Header -->
+  <header>
+    <nav class="nav-right-only">
+      <div id="userMenu" style="display: none;">
+        <span id="userName" style="margin-right: 10px; color: #333;"></span>
+        <button id="logoutBtn" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Logout</button>
+      </div>
+      <div id="loginMenu" style="display: none;">
+        <a href="login.html" style="margin-right: 10px; color: #007bff; text-decoration: none;">Login</a>
+        <a href="signup.html" style="color: #007bff; text-decoration: none;">Sign Up</a>
+      </div>
+      <label for="profileUpload" title="Upload Profile Picture" class="profile-label" id="profileLabel" style="display: none;">
+        <img id="profileImage" src="profile.jpg" alt="Profile" class="profile-icon" />
+      </label>
+      <input type="file" id="profileUpload" accept="image/*" style="display:none" />
+      <a href="help.html" title="Help & Support">
+        <img src="support.png" alt="Help & Support" class="help-icon" />
+      </a>
+    </nav>
+  </header>
+
+  <!-- Hamburger -->
+  <div class="hamburger" onclick="openSidebar()">☰</div>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <h3>Menu</h3>
+      <span class="close-btn" onclick="closeSidebar()">×</span>
+    </div>
+    <ul>
+      <li><a href="report.html">Report a New Problem</a></li>
+      <li><a href="profile.html">My Profile & Reports</a></li>
+      <!-- ✅ Map View -->
+      <li><a href="#" onclick="event.preventDefault(); showMapView(); closeSidebar();">Map View</a></li>
+      <li><a href="help.html">Help & Support</a></li>
+      <li><a href="admin/admin_login.html">Admin Login</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Section -->
+  <main class="main-content" id="mainContent">
+
+    <!-- Hero Section -->
+    <section class="hero-full">
+      <div class="hero-content">
+        <p class="hero-tagline">Small Reports, Big Impact</p>
+        <h1>Have a Societal Concern?</h1>
+        <p>Together we can make our communities safer, cleaner, and better.</p>
+
+        <div class="hero-buttons">
+          <button class="hero-btn primary" id="reportNowBtn">Report Now</button>
+          <button class="hero-btn secondary">Learn More</button>
+        </div>
+
+        <div class="hero-stats-inline">
+          <span>✔ 500+ Issues Reported</span>
+          <span>✔ 200+ Resolved</span>
+          <span>✔ 10+ Communities</span>
+        </div>
+      </div>
+
+      <div class="hero-image">
+        <img src="co.jpg" alt="Community illustration" />
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+      <div class="feature">
+        <img src="report.jpg" alt="Report Issues">
+        <h3>Report</h3>
+        <p>Quickly report issues in your area with just a few clicks.</p>
+      </div>
+      <div class="feature">
+        <img src="vote.png" alt="Vote">
+        <h3>Vote</h3>
+        <p>Support issues raised by others through community voting.</p>
+      </div>
+      <div class="feature">
+        <img src="track.jpg" alt="Track">
+        <h3>Track</h3>
+        <p>Track the status of your reported issues in real-time.</p>
+      </div>
+      <div class="feature">
+        <img src="help&support.png" alt="Support">
+        <h3>Support</h3>
+        <p>Access help and support anytime for quick assistance.</p>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats-section">
+      <div class="stat-card">
+        <h2 id="totalIssues">0</h2>
+        <p>Total Issues Reported</p>
+      </div>
+      <div class="stat-card">
+        <h2 id="inProgressIssues">0</h2>
+        <p>In Progress</p>
+      </div>
+      <div class="stat-card">
+        <h2 id="resolvedIssues">0</h2>
+        <p>Resolved</p>
+      </div>
+    </section>
+
+    <!-- ✅ Search + Filters -->
+    <section class="search-filter-bar">
+      <div class="search-box">
+        <input type="text" id="searchBar" placeholder="🔍 Search issues by keyword..." />
+      </div>
+      <div class="filter-controls">
+        <label for="sortSelect">Sort:</label>
+        <select id="sortSelect">
+          <option value="latest">Latest</option>
+          <option value="oldest">Oldest</option>
+          <option value="title">Title (A–Z)</option>
+        </select>
+
+        <label for="filterSelect">Filter:</label>
+        <select id="filterSelect">
+          <option value="all">All</option>
+          <option value="Roads">Roads</option>
+          <option value="Infrastructure">Infrastructure</option>
+          <option value="Sanitation">Sanitation</option>
+          <option value="Garbage">Garbage</option>
+          <option value="Electricity">Electricity</option>
+          <option value="Water">Water</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Issues -->
+    <section class="issues-section">
+      <h2>Community Reported Issues</h2>
+      <div id="issuesContainer" class="issues-list"></div>
+    </section>
+
+    <!-- ✅ Map Section with Back button -->
+    <section id="mapSection" class="map-section" style="display:none;">
+      <h2>Issues Map View</h2>
+      <div id="map" style="height:500px; width:100%; border-radius:10px; margin-bottom:15px;"></div>
+      <button onclick="showListView()" class="hero-btn secondary">← Back to List View</button>
+    </section>
+
+  </main>
+
+  <div id="popupModal" class="popup-modal">
+    <div class="popup-box">
+      <span class="close-btn" onclick="closePopup()">&times;</span>
+      <div id="popupContent"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 Societal Issue Reporting | Designed for SIH25031</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="api-client.js"></script>
+
+  <!-- ✅ Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <!-- ✅ Extra inline script for back button -->
+  <script>
+    function showListView() {
+      document.querySelector(".issues-section").style.display = "block";
+      document.getElementById("mapSection").style.display = "none";
+    }
+  </script>
+
+</body>
+</html>

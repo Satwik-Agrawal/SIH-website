@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Help & Support - Societal Issue Reporting</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .help-container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+    .help-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .help-header h1 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    .help-header p {
+      color: #666;
+      font-size: 18px;
+    }
+    .help-sections {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+    .help-card {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .help-card h3 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+    }
+    .help-card h3 span {
+      margin-right: 10px;
+      font-size: 24px;
+    }
+    .faq-item {
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eee;
+    }
+    .faq-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+    .faq-question {
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 8px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .faq-answer {
+      color: #666;
+      line-height: 1.6;
+      display: none;
+    }
+    .faq-answer.show {
+      display: block;
+    }
+    .faq-toggle {
+      font-size: 18px;
+      transition: transform 0.3s;
+    }
+    .faq-toggle.rotated {
+      transform: rotate(180deg);
+    }
+    .contact-info {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+    .contact-info h3 {
+      color: #2c3e50;
+      margin-bottom: 15px;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .contact-item span {
+      margin-right: 10px;
+      font-size: 18px;
+    }
+    .chatbot-widget {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 350px;
+      height: 500px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      display: none;
+      flex-direction: column;
+      z-index: 1000;
+    }
+    .chatbot-header {
+      background: #007bff;
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chatbot-header h4 {
+      margin: 0;
+    }
+    .chatbot-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .chatbot-messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      max-height: 350px;
+    }
+    .message {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: flex-start;
+    }
+    .message.user {
+      justify-content: flex-end;
+    }
+    .message-content {
+      max-width: 80%;
+      padding: 10px 15px;
+      border-radius: 18px;
+      word-wrap: break-word;
+    }
+    .message.bot .message-content {
+      background: #f1f3f4;
+      color: #333;
+    }
+    .message.user .message-content {
+      background: #007bff;
+      color: white;
+    }
+    .chatbot-input {
+      padding: 15px;
+      border-top: 1px solid #eee;
+      display: flex;
+      gap: 10px;
+    }
+    .chatbot-input input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      outline: none;
+    }
+    .chatbot-input button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    .chatbot-trigger {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 999;
+    }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #007bff;
+      text-decoration: none;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 768px) {
+      .help-sections {
+        grid-template-columns: 1fr;
+      }
+      .chatbot-widget {
+        width: 90%;
+        height: 70vh;
+        bottom: 10px;
+        right: 5%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="help-container">
+    <a href="index.html" class="back-link">← Back to Home</a>
+    
+    <div class="help-header">
+      <h1>Help & Support</h1>
+      <p>Get assistance with using our platform</p>
+    </div>
+
+    <div class="contact-info">
+      <h3>📞 Contact Information</h3>
+      <div class="contact-item">
+        <span>📧</span>
+        <span>Email: support@sih-issues.com</span>
+      </div>
+      <div class="contact-item">
+        <span>📱</span>
+        <span>Phone: +91 98765 43210</span>
+      </div>
+      <div class="contact-item">
+        <span>🕒</span>
+        <span>Hours: Monday - Friday, 9:00 AM - 6:00 PM</span>
+      </div>
+    </div>
+
+    <div class="help-sections">
+      <div class="help-card">
+        <h3><span>❓</span>Frequently Asked Questions</h3>
+        
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            How do I report an issue?
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            Click on "Report Now" button on the home page, fill in the required details, upload a photo if available, and submit your report. You need to be logged in to report issues.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            How do I vote on issues?
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            Simply click the "Vote" button on any issue card. You can only vote once per issue. You need to be logged in to vote.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            How do I track my reported issues?
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            Go to your profile page to see all issues you've reported and their current status. You can also check the status by looking at the issue cards on the home page.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            What categories of issues can I report?
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            You can report issues related to Roads, Infrastructure, Sanitation, Garbage, Electricity, Water, and other civic problems in your area.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            How long does it take to resolve issues?
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            Resolution time varies depending on the complexity and type of issue. Simple issues may be resolved within a few days, while complex infrastructure problems may take weeks or months.
+          </div>
+        </div>
+      </div>
+
+      <div class="help-card">
+        <h3><span>📋</span>User Guide</h3>
+        
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            Getting Started
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            1. Create an account or login<br>
+            2. Browse existing issues on the home page<br>
+            3. Vote on issues that matter to you<br>
+            4. Report new issues you discover<br>
+            5. Track the progress of your reports
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            Best Practices for Reporting
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            • Take clear, well-lit photos<br>
+            • Provide accurate location information<br>
+            • Write detailed descriptions<br>
+            • Choose the correct category<br>
+            • Be patient for resolution
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            Understanding Issue Status
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            <strong>Pending:</strong> Issue has been reported and is awaiting review<br>
+            <strong>In Progress:</strong> Issue is being worked on by authorities<br>
+            <strong>Resolved:</strong> Issue has been fixed and closed
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            Privacy and Security
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            Your personal information is protected and only used for verification purposes. Issue reports are public but your contact details remain private unless you choose to share them.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="help-card">
+      <h3><span>🤖</span>Need More Help?</h3>
+      <p>If you can't find the answer to your question in our FAQ, feel free to use our chatbot for instant assistance or contact our support team directly.</p>
+      <p>Click the chat button in the bottom-right corner to start a conversation with our AI assistant.</p>
+      
+      <!-- Inline Chatbot Section -->
+      <div class="inline-chatbot" style="margin-top: 20px; border: 1px solid #ddd; border-radius: 8px; padding: 15px;">
+        <h4>Quick Chat Assistant</h4>
+        <div id="inlineChatMessages" style="height: 200px; overflow-y: auto; border: 1px solid #eee; padding: 10px; margin: 10px 0; background: #f9f9f9;">
+          <div class="message bot">
+            <div class="message-content">Hello! How can I help you today?</div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <input type="text" id="inlineChatInput" placeholder="Type your message..." style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+          <button onclick="sendInlineMessage()" style="padding: 8px 15px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chatbot Widget -->
+  <div id="chatbotWidget" class="chatbot-widget">
+    <div class="chatbot-header">
+      <h4>🤖 Help Assistant</h4>
+      <button class="chatbot-close" onclick="toggleChatbot()">×</button>
+    </div>
+    <div class="chatbot-messages" id="chatbotMessages">
+      <div class="message bot">
+        <div class="message-content">
+          Hello! I'm here to help you with any questions about our platform. How can I assist you today?
+        </div>
+      </div>
+    </div>
+    <div class="chatbot-input">
+      <input type="text" id="chatbotInput" placeholder="Type your message..." onkeypress="handleChatbotKeypress(event)">
+      <button onclick="sendChatbotMessage()">Send</button>
+    </div>
+  </div>
+
+  <!-- Chatbot Trigger Button -->
+  <button class="chatbot-trigger" onclick="toggleChatbot()">💬</button>
+
+  <script>
+    // FAQ Toggle Function
+    function toggleFAQ(element) {
+      const answer = element.nextElementSibling;
+      const toggle = element.querySelector('.faq-toggle');
+      
+      if (answer.classList.contains('show')) {
+        answer.classList.remove('show');
+        toggle.classList.remove('rotated');
+      } else {
+        answer.classList.add('show');
+        toggle.classList.add('rotated');
+      }
+    }
+
+    // Chatbot Functions
+    function toggleChatbot() {
+      const widget = document.getElementById('chatbotWidget');
+      widget.style.display = widget.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function handleChatbotKeypress(event) {
+      if (event.key === 'Enter') {
+        sendChatbotMessage();
+      }
+    }
+
+    function sendChatbotMessage() {
+      const input = document.getElementById('chatbotInput');
+      const message = input.value.trim();
+      
+      if (!message) return;
+      
+      // Add user message
+      addMessage(message, 'user');
+      input.value = '';
+      
+      // Generate bot response
+      setTimeout(() => {
+        const response = generateBotResponse(message);
+        addMessage(response, 'bot');
+      }, 1000);
+    }
+
+    function addMessage(text, sender) {
+      const messagesContainer = document.getElementById('chatbotMessages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${sender}`;
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'message-content';
+      contentDiv.textContent = text;
+      
+      messageDiv.appendChild(contentDiv);
+      messagesContainer.appendChild(messageDiv);
+      
+      // Scroll to bottom
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function generateBotResponse(userMessage) {
+      const message = userMessage.toLowerCase();
+      
+      // Simple rule-based responses
+      if (message.includes('report') || message.includes('submit')) {
+        return "To report an issue, click the 'Report Now' button on the home page, fill in the required details, and submit. Make sure you're logged in first!";
+      }
+      
+      if (message.includes('vote') || message.includes('voting')) {
+        return "You can vote on issues by clicking the 'Vote' button on any issue card. You can only vote once per issue and need to be logged in.";
+      }
+      
+      if (message.includes('status') || message.includes('track')) {
+        return "You can track your reported issues by going to your profile page or checking the status on the issue cards. Status can be Pending, In Progress, or Resolved.";
+      }
+      
+      if (message.includes('login') || message.includes('account')) {
+        return "To create an account, click 'Sign Up' in the top-right corner. If you already have an account, click 'Login' to sign in.";
+      }
+      
+      if (message.includes('category') || message.includes('type')) {
+        return "You can report issues in these categories: Roads, Infrastructure, Sanitation, Garbage, Electricity, Water, and Other civic problems.";
+      }
+      
+      if (message.includes('photo') || message.includes('image') || message.includes('camera')) {
+        return "Yes! You can take photos directly using your device camera or upload images from your gallery when reporting issues. Photos help authorities understand the problem better.";
+      }
+      
+      if (message.includes('time') || message.includes('how long') || message.includes('resolve')) {
+        return "Resolution time varies by issue complexity. Simple issues may be fixed in days, while complex infrastructure problems may take weeks or months.";
+      }
+      
+      if (message.includes('contact') || message.includes('support') || message.includes('help')) {
+        return "You can contact us at support@sih-issues.com or call +91 98765 43210. Our support hours are Monday-Friday, 9 AM to 6 PM.";
+      }
+      
+      if (message.includes('privacy') || message.includes('security') || message.includes('data')) {
+        return "Your personal information is protected and only used for verification. Issue reports are public but your contact details remain private.";
+      }
+      
+      // Default response
+      return "I understand you're asking about: '" + userMessage + "'. For more specific help, please check our FAQ section above or contact our support team directly. Is there anything else I can help you with?";
+    }
+
+    // Inline chatbot functions
+    function sendInlineMessage() {
+      const input = document.getElementById('inlineChatInput');
+      const message = input.value.trim();
+      
+      if (!message) return;
+      
+      // Add user message
+      addInlineMessage(message, 'user');
+      input.value = '';
+      
+      // Generate bot response
+      setTimeout(() => {
+        const response = generateBotResponse(message);
+        addInlineMessage(response, 'bot');
+      }, 1000);
+    }
+
+    function addInlineMessage(text, sender) {
+      const messagesContainer = document.getElementById('inlineChatMessages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${sender}`;
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'message-content';
+      contentDiv.textContent = text;
+      
+      messageDiv.appendChild(contentDiv);
+      messagesContainer.appendChild(messageDiv);
+      
+      // Scroll to bottom
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    // Handle Enter key for inline chat
+    document.getElementById('inlineChatInput').addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        sendInlineMessage();
+      }
+    });
+
+    // Close chatbot when clicking outside
+    document.addEventListener('click', function(event) {
+      const widget = document.getElementById('chatbotWidget');
+      const trigger = document.querySelector('.chatbot-trigger');
+      
+      if (widget.style.display === 'flex' && 
+          !widget.contains(event.target) && 
+          !trigger.contains(event.target)) {
+        widget.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

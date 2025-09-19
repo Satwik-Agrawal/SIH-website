@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- ✅ Leaflet.js for Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      display: flex;
+    }
+    /* Sidebar */
+    .sidebar {
+      width: 200px;
+      background: #1c1f2e;
+      color: white;
+      height: 100vh;
+      padding: 20px 0;
+      position: fixed;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 18px;
+    }
+    .sidebar a {
+      display: block;
+      padding: 12px 20px;
+      color: #bbb;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .sidebar a:hover {
+      background: #2d3250;
+      color: #fff;
+    }
+
+    /* Main */
+    .main {
+      margin-left: 200px;
+      padding: 20px;
+      width: calc(100% - 200px);
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+    }
+
+    .left {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+    .card {
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      text-align: center;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+    }
+    .pending { background: #f39c12; }
+    .progress { background: #3498db; }
+    .resolved { background: #2ecc71; }
+    .total { background: #7f8c8d; }
+
+    .section {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      padding: 15px;
+    }
+    .section h3 {
+      margin-bottom: 10px;
+      font-size: 16px;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 5px;
+    }
+    table th, table td {
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+      font-size: 14px;
+    }
+    table th { background: #f8f9fb; }
+
+    /* Right Section */
+    .right {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .map-section, .chart-section {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      padding: 15px;
+    }
+    #map {
+      width: 100%;
+      height: 300px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>⚡ Admin Panel</h2>
+    <a href="#">📊 Dashboard</a>
+    <a href="#">📝 Issues</a>
+    <a href="#">📈 Analytics</a>
+    <a href="#">🗺 Map</a>
+    <a href="#">⚙ Settings</a>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <!-- Left Side -->
+    <div class="left">
+      <h1>Dashboard</h1>
+
+      <!-- Stats -->
+      <div class="stats">
+        <div class="card pending">Pending<br>7</div>
+        <div class="card progress">In Progress<br>5</div>
+        <div class="card resolved">Resolved<br>3</div>
+        <div class="card total">Total<br>15</div>
+      </div>
+
+      <!-- Issues List -->
+      <div class="section">
+        <h3>Recent Issues</h3>
+        <table>
+          <tr><th>ID</th><th>Category</th><th>Description</th><th>District</th><th>Status</th></tr>
+          <tr><td>1</td><td>Pothole</td><td>Huge pothole near Hostel Road</td><td>Ranchi</td><td>Pending</td></tr>
+          <tr><td>2</td><td>Streetlight</td><td>Broken streetlight in Sector 5</td><td>Dhanbad</td><td>In Progress</td></tr>
+          <tr><td>3</td><td>Garbage</td><td>Uncollected garbage in Market Area</td><td>Jamshedpur</td><td>Resolved</td></tr>
+        </table>
+      </div>
+
+      <!-- Chart -->
+      <div class="section">
+        <h3>Issues Overview</h3>
+        <canvas id="barChart" height="100"></canvas>
+      </div>
+
+      <!-- Admin Logs -->
+      <div class="section">
+        <h3>Recent Admin Actions</h3>
+        <ul>
+          <li>✔️ Marked Issue #3 (Garbage) as Resolved</li>
+          <li>🔄 Updated Issue #2 (Streetlight) status to In Progress</li>
+          <li>📌 Added new Issue #4 (Water Leakage) in Bokaro</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Right Side -->
+    <div class="right">
+      <!-- Map -->
+      <div class="map-section">
+        <h3>Issue Locations (Ranchi)</h3>
+        <div id="map"></div>
+      </div>
+
+      <!-- Pie Chart -->
+      <div class="chart-section">
+        <h3>Issues by District</h3>
+        <canvas id="districtChart" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bar Chart -->
+  <script>
+    new Chart(document.getElementById("barChart"), {
+      type: 'bar',
+      data: {
+        labels: ["Pothole", "Streetlight", "Garbage"],
+        datasets: [{
+          label: "Number of Issues",
+          data: [7, 5, 3],
+          backgroundColor: ["#f39c12", "#3498db", "#2ecc71"]
+        }]
+      },
+      options: {
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    // Pie Chart
+    new Chart(document.getElementById("districtChart"), {
+      type: 'pie',
+      data: {
+        labels: ["Ranchi", "Dhanbad", "Jamshedpur"],
+        datasets: [{
+          data: [7, 5, 3],
+          backgroundColor: ["#f39c12", "#3498db", "#2ecc71"]
+        }]
+      }
+    });
+  </script>
+
+  <!-- Leaflet Map Script -->
+  <script>
+    // Center map on Ranchi
+    var map = L.map('map').setView([23.3441, 85.3096], 12);
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Add markers in Ranchi
+    L.marker([23.3441, 85.3096]).addTo(map)
+      .bindPopup("<b>Hostel Road</b><br>Huge pothole (Pending)");
+
+    L.marker([23.3500, 85.3200]).addTo(map)
+      .bindPopup("<b>Sector 5</b><br>Broken streetlight (In Progress)");
+
+    L.marker([23.3300, 85.3000]).addTo(map)
+      .bindPopup("<b>Market Area</b><br>Uncollected garbage (Resolved)");
+  </script>
+</body>
+</html>

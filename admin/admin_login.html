@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Login - Societal Issue Reporting</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .admin-login-body {
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #f4f6f9;
+      padding: 20px;
+    }
+    .login-container {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 350px;
+    }
+    h2 { margin-bottom: 20px; color: #333; }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      background: #007bff;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover { background: #0056b3; }
+    .signup-link {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+    .signup-link a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    .signup-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body class="admin-login-body">
+  <div class="login-container">
+    <h2>Admin Login</h2>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button onclick="adminLogin()">Login</button>
+    <div class="signup-link">
+      Don’t have an account? <a href="admin_signup.html">Sign Up</a>
+    </div>
+  </div>
+
+  <script src="api-client.js"></script>
+  <script>
+    async function adminLogin() {
+      alert("Admin Login");
+      window.location.href = "./admin_dashboard.html";
+      // const email = document.getElementById("email").value.trim();
+      // const password = document.getElementById("password").value.trim();
+      // const apiClient= window.apiClient || new window.APIClient();
+
+      // if (!email || !password) {
+      //   alert("Please fill in all fields");
+      //   return;
+      // }
+
+      // try {
+      //   const result = await apiClient.adminLogin(email, password);
+      //   if (result.success) {
+      //     alert("✅ Login successful!");
+      //     window.location.href = "/admin_dashboard.html";
+      //   } else {
+      //     alert("❌ " + (result.error || "Invalid credentials"));
+      //   }
+      // } catch (error) {
+      //   alert(`❌ Network error. Please try again ${error}`);
+      // }
+    }
+  </script>
+</body>
+</html>

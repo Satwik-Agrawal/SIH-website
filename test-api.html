@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+</head>
+<body>
+    <h1>API Client Test</h1>
+    <button onclick="testAPI()">Test API Connection</button>
+    <div id="result"></div>
+
+    <script src="/api-client.js"></script>
+    <script>
+        async function testAPI() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing...';
+            
+            try {
+                // Test if API client loads
+                if (typeof apiClient === 'undefined') {
+                    resultDiv.innerHTML = '❌ API Client not loaded';
+                    return;
+                }
+                
+                resultDiv.innerHTML = '✅ API Client loaded successfully';
+                
+                // Test a simple API call
+                const response = await fetch('/api/issues');
+                if (response.ok) {
+                    resultDiv.innerHTML += '<br>✅ API endpoint accessible';
+                } else {
+                    resultDiv.innerHTML += '<br>❌ API endpoint error: ' + response.status;
+                }
+                
+            } catch (error) {
+                resultDiv.innerHTML = '❌ Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
